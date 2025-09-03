@@ -1,0 +1,55 @@
+[project]
+name = "devious-schema"
+version = "0.1.0"
+description = "Convert multiple JSON files to a Pydantic schema."
+readme = "README.md"
+authors = [
+    { name = "ryn-cx", email = "84663588+ryn-cx@users.noreply.github.com" }
+]
+requires-python = ">=3.13"
+dependencies = []
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
+    "pre-commit>=4.3.0",
+    "pylint>=3.3.8",
+    "pytest>=8.4.1",
+    "ruff>=0.12.11",
+]
+
+[tool.ruff.lint]
+select = ["ALL"] # Enable all linters.
+ignore = [
+    # S603 and S602 overlap where one or the other is always true. S603 is disabled
+    # because S602 is more secure than S603.
+    "S603",
+
+    # This rule makes it impossible to access URLs that are dynamically created.
+    "S310",
+
+    # Docstrings should exist when they are useful, requiring them just leads to bad
+    # docstrings.
+    "D100",
+    "D101",
+    "D102",
+    "D103",
+    "D104",
+    "D105",
+    "D106",
+    "D107",
+
+    # Allow TODO comments.
+    "TD002",
+    "TD003",
+    "FIX002",
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = ["S101"] # Asserts should be allowed in tests.
