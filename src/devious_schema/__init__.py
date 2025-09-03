@@ -229,6 +229,24 @@ def get_schema_from_files(
     return generate_pydantic_schema(root, root_name)
 
 
+def get_schema_from_folder(
+    folder_path: str | Path,
+    root_name: str,
+) -> str:
+    """Generate Pydantic schema from all JSON files in a folder."""
+    root = TypeInfo(name=root_name)
+    path = Path(folder_path)
+    if not path.exists() or not path.is_dir():
+        msg = f"Error: '{folder_path}' does not exist or is not a directory"
+        raise FileNotFoundError(msg)
+
+    for json_file in path.glob("*.json"):
+        parsed_data = json.loads(json_file.read_text(encoding="utf-8"))
+        parse(parsed_data, root)
+
+    return generate_pydantic_schema(root, root_name)
+
+
 class CLISettings(BaseSettings):
     """Command line interface settings."""
 
