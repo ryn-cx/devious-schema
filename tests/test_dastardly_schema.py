@@ -85,13 +85,13 @@ class Root(BaseModel):
     none: None
     list: list[Any]
     list_with_items: list[str | int]
-    dict_with_key: RootDictWithKeyDict
+    dict_with_key: "RootDictWithKeyDict"
     empty_dict: dict[str, Any]
     camel_case_string: str = Field(alias="camelCaseString")
-    camel_case_dict: RootCamelCaseDictDict = Field(alias="camelCaseDict")
+    camel_case_dict: "RootCamelCaseDictDict" = Field(alias="camelCaseDict")
     nested_list: list[list[int]]
-    __private_str_1: str
-    __private_str2: str = Field(alias="__privateStr2")"""
+    private_str_1: str = Field(alias="__private_str_1")
+    private_str2: str = Field(alias="__privateStr2")"""
     assert expected == get_schema(data, "Root")
 
 
@@ -128,5 +128,5 @@ class RootDict(BaseModel):
     a: int
 
 
-root: RootDict | list[str | int]"""
+root: "RootDict" | list[str | int]"""
     assert expected == get_schema_from_strings(params, "Root")

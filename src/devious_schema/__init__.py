@@ -131,7 +131,7 @@ def build_type_annotation(type_info: TypeInfo, models: list[str]) -> str:  # noq
 
     if type_info.dict_keys:
         dict_class_name = f"{to_pascal_case(type_info.name)}Dict"
-        type_parts.append(dict_class_name)
+        type_parts.append(f'"{dict_class_name}"')
         dict_model = generate_dict_model(type_info, dict_class_name, models)
         models.insert(0, dict_model)
     elif type_info.allow_dict:
@@ -163,10 +163,11 @@ def generate_dict_model(type_info: TypeInfo, model_name: str, models: list[str])
         field_type = build_type_annotation(field_wrapper, models)
 
         field_config = ""
-        if to_snake_case(field_name) != field_name:
+        if to_snake_case(field_name) != field_name or field_name.startswith("__"):
             field_config = f' = Field(alias="{field_name}")'
 
-        lines.append(f"    {to_snake_case(field_name)}: {field_type}{field_config}")
+        clean_name = field_name.lstrip("_")
+        lines.append(f"    {to_snake_case(clean_name)}: {field_type}{field_config}")
 
     return "\n".join(lines)
 
